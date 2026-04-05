@@ -4,7 +4,7 @@ certifi==2026.2.25
 charset-normalizer==3.4.6
 click==8.3.1
 cloudinary==1.44.1
-faiss-cpu==1.7.4
+faiss-cpu==1.9.0
 fastapi==0.110.0
 filelock==3.25.2
 fsspec==2026.3.0
