@@ -1,0 +1,56 @@
+paths:
+  deepfashion_root: "data/mock_deepfashion"
+  polyvore_root:    "data/mock_polyvore"
+  person1_crops:    "data/person1_crops"
+  checkpoints:      "outputs/checkpoints_mock"
+  logs:             "outputs/logs_mock"
+  results:          "outputs/results_mock"
+
+classifier:
+  backbone: "google/vit-base-patch16-224-in21k"
+  image_size: 224
+  embed_dim: 768
+  num_categories: 50
+  num_colors: 12
+  num_patterns: 8
+  num_styles: 6
+  batch_size: 8
+  num_epochs: 3
+  warmup_epochs: 1
+  head_lr: 2.0e-4
+  backbone_lr: 1.0e-5
+  backbone_unfreeze_epoch: 1
+  weight_decay: 1.0e-4
+  label_smoothing: 0.1
+  grad_clip: 1.0
+  random_erasing_p: 0.2
+  mixup_alpha: 0.2
+  color_jitter: [0.2, 0.2, 0.2, 0.05]
+  scheduler: "cosine"
+  min_lr: 1.0e-7
+  loss_weights:
+    category: 1.0
+    color: 0.5
+    pattern: 0.5
+    style: 0.5
+  topk: [1, 5]
+
+compatibility:
+  embed_dim: 768
+  proj_dim: 64
+  num_garment_types: 11
+  batch_size: 16
+  num_epochs: 3
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  loss: "bpr"
+  triplet_margin: 0.2
+  num_negatives: 2
+  fitb_num_candidates: 4
+  scheduler: "cosine"
+  min_lr: 1.0e-6
+
+seed: 42
+num_workers: 0
+device: "auto"
+fp16: false

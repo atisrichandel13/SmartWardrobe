@@ -1,0 +1,19 @@
+# Data folder (too large)
+data/
+
+# Python cache
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+
+# Outputs (optional, remove if you want to keep)
+outputs/
+
+# Virtual environment
+venv/
+.env/
+env/
+
+# VS Code
+.vscode/data/

@@ -1,0 +1,86 @@
+# ============================================================
+# Person 2 – Classifier + Compatibility Model Config
+# ============================================================
+
+# ── Paths ────────────────────────────────────────────────────
+paths:
+  deepfashion_root: "data/deepfashion"          # download dir for DeepFashion
+  polyvore_root:    "data/polyvore_outfits"      # download dir for Polyvore Outfits
+  person1_crops:    "data/person1_crops"         # 224×224 crops from Person 1's pipeline
+  checkpoints:      "outputs/checkpoints"
+  logs:             "outputs/logs"
+  results:          "outputs/results"
+
+# ── Classifier ───────────────────────────────────────────────
+classifier:
+  backbone: "google/vit-base-patch16-224-in21k"  # HF model id
+  image_size: 224
+  embed_dim: 768                                  # ViT-B/16 CLS token dim
+
+  # DeepFashion category + attribute labels
+  # These match the standard DeepFashion Category/Attribute benchmark splits
+  num_categories: 50                              # coarse: 3 cloth-type + fine 50-class
+  num_colors: 12
+  num_patterns: 8
+  num_styles: 6
+
+  # Training
+  batch_size: 64
+  num_epochs: 45
+  warmup_epochs: 3
+
+  # Two-stage learning rates
+  head_lr: 2.0e-4
+  backbone_lr: 1.0e-5
+  backbone_unfreeze_epoch: 5   # unfreeze last 4 blocks after this epoch
+
+  weight_decay: 1.0e-4
+  label_smoothing: 0.1
+  grad_clip: 1.0
+
+  # Augmentation
+  random_erasing_p: 0.2
+  mixup_alpha: 0.2
+  color_jitter: [0.2, 0.2, 0.2, 0.05]
+
+  # Scheduler
+  scheduler: "cosine"
+  min_lr: 1.0e-7
+
+  # Loss weights (multi-task)
+  loss_weights:
+    category: 1.0
+    color:    0.5
+    pattern:  0.5
+    style:    0.5
+
+  # Evaluation
+  topk: [1, 5]
+
+# ── Compatibility Model ──────────────────────────────────────
+compatibility:
+  embed_dim: 768                    # input from classifier
+  proj_dim: 64                      # compatibility embedding dim (keep small to avoid overfitting)
+  num_garment_types: 11             # Polyvore item types
+
+  batch_size: 512
+  num_epochs: 10
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+
+  # Triplet / BPR loss
+  loss: "bpr"                       # "bpr" or "triplet"
+  triplet_margin: 0.2
+  num_negatives: 4                  # negatives per positive pair
+
+  # Fill-in-the-blank eval
+  fitb_num_candidates: 4
+
+  scheduler: "cosine"
+  min_lr: 1.0e-6
+
+# ── General ──────────────────────────────────────────────────
+seed: 42
+num_workers: 4
+device: "auto"    # "auto" picks cuda > mps > cpu
+fp16: true        # mixed precision
