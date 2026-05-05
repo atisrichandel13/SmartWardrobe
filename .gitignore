@@ -10,3 +10,4 @@ wardrobe_mapping.json
 *.egg-info
 .DS_Store
 .idea/
+.
